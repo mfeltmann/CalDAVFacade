@@ -7,10 +7,10 @@ define( 'head_request', 'HEAD' );
 define( 'options_request', 'OPTIONS' );
 
 // Manipulate Request Methods
-define( 'get_method', 'GET' );
-define( 'post_method', 'POST' );
-define( 'put_method', 'PUT' );
-define( 'delete_method', 'DELETE' );
+define( 'get_request', 'GET' );
+define( 'post_request', 'POST' );
+define( 'put_request', 'PUT' );
+define( 'delete_request', 'DELETE' );
 
 // Premature Reserverd Request Method
 define( 'connect_request', 'CONNECT' );

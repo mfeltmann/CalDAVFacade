@@ -14,7 +14,7 @@ include_once( 'obj/httpBody.php' );
 $request_method = $_SERVER['REQUEST_METHOD'];
 $query_string = $_SERVER['QUERY_STRING'];
 
-$phpHeader = new HttpHeader();
+$phpHeader = new HttpHeader( 'HEAD,OPTIONS,GET' );
 $phpBody = new HttpBody();
 
 // Write something to the access log for debugging purposes.
@@ -27,7 +27,6 @@ fclose( $file );
 // EOW
 
 $phpHeader->sendHeader( $request_method, $query_string );
-
-$phpBody->sendBody( $request_method, $query_string );
+$phpBody->sendBody( $request_method, $query_string, apache_request_headers() );
 
 ?>

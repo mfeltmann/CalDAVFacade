@@ -2,6 +2,13 @@
 
 class HttpHeader {
     
+    private $_supportedRequestMethods;
+    
+    function __construct( $supportedRequestMethods ) {
+        
+        $this->_supportedRequestMethods = $supportedRequestMethods;
+    }
+    
     function sendHeader( $requestMethod, $queryString ) {
         
         
@@ -25,7 +32,7 @@ class HttpHeader {
     function _send_options_header() {
     
         header( 'HTTP/1.1 200 OK', false, 200 );
-        header( 'Allow: HEAD,OPTIONS' );
+        header( 'Allow: '.$this->_supportedRequestMethods );
         header( 'Content-Length: 0' );
     }
     
