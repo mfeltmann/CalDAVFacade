@@ -33,7 +33,7 @@ class HttpHeader {
             
             else if( $queryString == 'create' ) {
 
-                self::_send_create_header();
+                self::_send_create_header( 'http://localhost/~feltmann/CarSharing/index.php?entityID=created' );
                 return;
             }
         }
@@ -123,9 +123,10 @@ class HttpHeader {
         header( 'Content-Length: 0' );
     }
     
-    function _send_create_header() {
+    function _send_create_header( $newLocation ) {
         
         header( 'HTTP/1.1 201 CREATED', true, 201 );
+        header( 'Location: ' . $newLocation );
         header( 'Content-Length: 0' );
     }
 
