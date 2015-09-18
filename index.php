@@ -14,7 +14,7 @@ include_once( 'obj/httpBody.php' );
 $request_method = $_SERVER['REQUEST_METHOD'];
 $query_string = $_SERVER['QUERY_STRING'];
 
-$phpHeader = new HttpHeader( 'HEAD,OPTIONS,GET,POST,PUT' );
+$phpHeader = new HttpHeader( 'HEAD,OPTIONS,GET,POST,PUT,DELETE' );
 $phpBody = new HttpBody();
 
 // Write something to the access log for debugging purposes.

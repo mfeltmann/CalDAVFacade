@@ -63,8 +63,41 @@ class HttpHeader {
                 self::_send_moved_permanently_header( 'http://localhost/~feltmann/CarSharing/index.php?entityID=moved' );
                 return;
             }
-
         }
+        
+        else if( $requestMethod == delete_request ) {
+            
+            if( $queryString == 'entityID=emptee' ) {
+                
+                self::_send_no_content_header();
+                return;
+            }
+            
+            else if( $queryString == 'entityID=common' ) {
+                
+                self::_send_ok_header();
+                return;
+            }
+
+            else if( $queryString == 'entityID=null' ) {
+                
+                self::_send_not_implemented_header();
+                return;
+            }
+            
+            else if( $queryString == 'entityID=missing' ) {
+                
+                self::_send_not_found_header();
+                return;
+            }
+
+            else if( $queryString == 'entityID=pending' ) {
+                
+                self::_send_accept_header();
+                return;
+            }
+        }
+
         
         self::_send_ok_header();
         return;
@@ -112,6 +145,12 @@ class HttpHeader {
         
         header( 'HTTP/1.1 301 MOVED PERMANENTLY', true, 301 );
         header( 'Location: ' . $newLocation );
+        header( 'Content-Length: 0' );
+    }
+    
+    function _send_accept_header() {
+        
+        header( 'HTTP/1.1 202 ACCEPT', true, 202 );
         header( 'Content-Length: 0' );
     }
 }

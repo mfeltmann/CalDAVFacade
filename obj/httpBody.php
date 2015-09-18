@@ -24,21 +24,15 @@ class HttpBody {
                 echo 'Success';
                 return;
             }
+        }
+        
+        else if( $requestMethod == delete_request ) {
             
-            else  if( $queryString == 'entityID=emptee' ) {
+            if( $queryString == 'entityID=common' ) {
                 
+                echo 'Success';
                 return;
             }
-
-            else  if( $queryString == 'entityID=null' ) {
-                
-                return;
-            }
-            
-            else  if( $queryString == 'entityID=missing' ) {
-                
-                return;
-            }            
         }
     }
 
