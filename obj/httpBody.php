@@ -17,6 +17,29 @@ class HttpBody {
                 echo self::getBodyForResourceFilteredByHeaders( $queryString, $requestHeaders, $requestBody );                
             }
         }
+        else if( $requestMethod == put_request ) {
+            
+            if( $queryString == 'entityID=common' ) {
+                
+                echo 'Success';
+                return;
+            }
+            
+            else  if( $queryString == 'entityID=emptee' ) {
+                
+                return;
+            }
+
+            else  if( $queryString == 'entityID=null' ) {
+                
+                return;
+            }
+            
+            else  if( $queryString == 'entityID=missing' ) {
+                
+                return;
+            }            
+        }
     }
 
     function getBodyForResourceFilteredByHeaders( $resource, $requestHeaders ) {

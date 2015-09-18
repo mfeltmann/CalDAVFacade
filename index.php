@@ -14,13 +14,13 @@ include_once( 'obj/httpBody.php' );
 $request_method = $_SERVER['REQUEST_METHOD'];
 $query_string = $_SERVER['QUERY_STRING'];
 
-$phpHeader = new HttpHeader( 'HEAD,OPTIONS,GET,POST' );
+$phpHeader = new HttpHeader( 'HEAD,OPTIONS,GET,POST,PUT' );
 $phpBody = new HttpBody();
 
 // Write something to the access log for debugging purposes.
 $file = fopen('./access.log', 'a');
 $timestamp = time();
-$output_text = strval( $timestamp )."\t".$request_method."\n";
+$output_text = strval( $timestamp )."\t".$request_method."\t".$query_string."\n";
 
 $result = fwrite( $file, $output_text, strlen($output_text) );
 fclose( $file );
