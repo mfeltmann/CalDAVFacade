@@ -14,7 +14,7 @@ include_once( 'obj/httpBody.php' );
 $request_method = $_SERVER['REQUEST_METHOD'];
 $query_string = $_SERVER['QUERY_STRING'];
 
-$phpHeader = new HttpHeader( 'HEAD,OPTIONS,GET' );
+$phpHeader = new HttpHeader( 'HEAD,OPTIONS,GET,POST' );
 $phpBody = new HttpBody();
 
 // Write something to the access log for debugging purposes.
@@ -26,7 +26,15 @@ $result = fwrite( $file, $output_text, strlen($output_text) );
 fclose( $file );
 // EOW
 
-$phpHeader->sendHeader( $request_method, $query_string );
-$phpBody->sendBody( $request_method, $query_string, apache_request_headers() );
+$phpInput = fopen('php://input', 'r');
+$requestBody = '';
+
+while( $line = fgets( $phpInput) != false ) {
+    
+    $requestBody .= $line;
+}
+
+$phpHeader->sendHeader( $request_method, $query_string, $requestBody );
+$phpBody->sendBody( $request_method, $query_string, apache_request_headers(), $requestBody );
 
 ?>

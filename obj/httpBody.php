@@ -2,17 +2,39 @@
 
 class HttpBody {
     
-    function sendBody( $requestMethod, $queryString, $requestHeaders ) {
+    function sendBody( $requestMethod, $queryString, $requestHeaders, $requestBody ) {
         
         // Neither HEAD nor OPTIONS require a body.
-        
+                
         if( $requestMethod == get_request ) {
+            
             echo self::getBodyForResourceFilteredByHeaders( $queryString, $requestHeaders );
         }
-        
+        else if( $requestMethod == post_request ) {
+
+            if( $queryString == 'create' ) {
+
+                echo self::getBodyForResourceFilteredByHeaders( $queryString, $requestHeaders, $requestBody );                
+            }
+        }
+    }
+
+    function getBodyForResourceFilteredByHeaders( $resource, $requestHeaders ) {
+    
+        return self::getBodyForResourceFilteredByHeadersAndBody($resource, $requestHeaders, '' );
     }
     
-    function getBodyForResourceFilteredByHeaders( $resource, $requestHeaders ) {
+    function getBodyForResourceFilteredByHeadersAndBody( $resource, $requestHeaders, $requestBody ) {
+        
+        if( $resource == 'create' ) {
+            
+            return 'http://localhost/~feltmann/CarSharing/index.php?entityID=1';
+        }
+        
+        else if( $resource != '' ) {
+            
+            return '';
+        }
         
         $possibleArray = ['all', 'new', 'old', 'matched', 'unmatched', 'ranged'];
         
