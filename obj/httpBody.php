@@ -35,6 +35,12 @@ class HttpBody {
             }
         }
     }
+    
+    function sendBodyMessage( $message ) {
+        
+        echo $message;
+        return;
+    }
 
     function getBodyForResourceFilteredByHeaders( $resource, $requestHeaders ) {
     
