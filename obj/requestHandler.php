@@ -19,11 +19,11 @@ class HttpRequestHandler {
         $this->httpBody = new HttpBody();
     }
     
-    function handle( $requestMethod, $requestHeader, $queryString, $requestBody = '' ) {
+    function handle( $requestMethod, $requestHeader, $entityType, $entityID, $requestBody = '' ) {
         
         if( $requestMethod == head_request ) {
             
-            self::_handleHeadRequest( $requestHeader, $queryString );
+            self::_handleHeadRequest( $requestHeader, $entityType, $entityID );
             return;
         }
         
@@ -34,34 +34,34 @@ class HttpRequestHandler {
         
         else if( $requestMethod == get_request ) {
             
-            self::_handleGetRequest( $requestHeader, $queryString, $requestBody );
+            self::_handleGetRequest( $requestHeader, $entityType, $entityID, $requestBody );
         }
         
         else if( $requestMethod == post_request ) {
             
-            self::_handlePostRequest( $requestHeader, $queryString, $requestBody );
+            self::_handlePostRequest( $requestHeader, $entityType, $entityID, $requestBody );
         }
         
         else if( $requestMethod == put_request ) {
             
-            self::_handlePutRequest( $requestHeader, $requestBody, $queryString );
+            self::_handlePutRequest( $requestHeader, $requestBody, $entityType, $entityID );
         }
         
         else if( $requestMethod == delete_request ) {
             
-            self::_handleDeleteRequest( $requestHeader, $requestBody, $queryString );
+            self::_handleDeleteRequest( $requestHeader, $requestBody, $entityType, $entityID );
         }
     }
     
     
     // Internal Methods
     
-    function _handleGetRequest( $requestHeader, $queryString, $requestBody = '' ) {
+    function _handleGetRequest( $requestHeader, $entityType, $entityID, $requestBody = '' ) {
         
-        if( self::_isQueryValid( $queryString ) === true ) {
+        if( self::_doesEntityExist( $entityType, $entityID ) === true ) {
             
             $this->httpHeader->send_ok_header();
-            echo $this->httpBody->sendBody( get_request, $queryString, $requestHeader, $requestBody );
+            echo $this->httpBody->sendBody( get_request, $entityType, $entityID, $requestHeader, $requestBody );
         }
         
         else {
@@ -70,9 +70,9 @@ class HttpRequestHandler {
         }
     }
     
-    function _handleHeadRequest( $requestHeader, $queryString ) {
+    function _handleHeadRequest( $requestHeader, $entityType, $entityID ) {
         
-        if( self::_isQueryValid( $queryString ) === true ) {
+        if( self::_doesEntityExist( $entityType, $entityID ) === true ) {
             
             $this->httpHeader->send_ok_header();
         }
@@ -88,78 +88,78 @@ class HttpRequestHandler {
         $this->httpHeader->send_options_header();
     }
     
-    function _handlePostRequest( $requestHeader, $queryString, $requestBody ) {
+    function _handlePostRequest( $requestHeader, $entityType, $entityID, $requestBody ='' ) {
         
-         if( self::_isQueryValid( $queryString ) === true ) {
-            
-            $this->httpHeader->send_ok_header();
-            echo $this->httpBody->sendBody( post_request, $queryString, $requestHeader, $requestBody );
-        }
-
-        else if( self::_doesQueryAwaitAnswer( $queryString ) === false ) {
+        if( self::_doesEntityAwaitAnswer( $entityType, $entityID ) === false ) {
             
             $this->httpHeader->send_no_content_header();
         }
         
-        else if( self::_doesQueryNeedCreation( $queryString ) === true ) {
+        else if( self::_doesEntityNeedCreation( $entityType, $entityID ) === true ) {
             
-            $this->httpHeader->send_create_header( 'http://localhost/~feltmann/CarSharing/index.php?entityID=created' );
+            $this->httpHeader->send_create_header( 'http://localhost/~feltmann/CarSharing/entity/created' );
         }
         
+        else if( self::_doesEntityExist( $entityType, $entityID ) === true ) {
+            
+            $this->httpHeader->send_ok_header();
+            echo $this->httpBody->sendBody( post_request, $entityType, $entityID, $requestHeader, $requestBody );
+        }
+
         else {
             
             $this->httpHeader->send_not_found_header();
         }       
     }
     
-    function _handlePutRequest( $requestHeader, $requestBody, $queryString ) {
+    function _handlePutRequest( $requestHeader, $requestBody, $entityType, $entityID ) {
         
-        if( self::_doesQueryAwaitAnswer( $queryString ) === false ) {
-            
-            $this->httpHeader->send_no_content_header();
-        }
-        
-        else if( self::_isQueryImplemented( $queryString ) === false ) {
+        if( self::_isEntityImplemented( $entityType, $entityID ) === false ) {
             
             $this->httpHeader->send_not_implemented_header();
         }
         
-        else if( self::_doesQueryNeedCreation( $queryString ) === true ) {
+        else if( self::_doesEntityNeedCreation( $entityType, $entityID ) === true ) {
             
             $this->httpHeader->send_ok_header();
             $this->httpBody->sendBodyMessage( 'Success' );
         }
         
-        else if( self::_hasQueryResultMoved( $queryString ) ) {
+        else if( self::_hasEntityMoved( $entityType, $entityID ) ) {
             
-            $this->httpHeader->send_moved_permanently_header( 'http://localhost/~feltmann/CarSharing/index.php?entityID=moved' );
+            $this->httpHeader->send_moved_permanently_header( 'http://localhost/~feltmann/CarSharing/entity/moved' );
+        }
+        
+        else if( self::_doesEntityAwaitAnswer( $entityType, $entityID ) === false ) {
+            
+            $this->httpHeader->send_no_content_header();
         }
     }
     
-    function _handleDeleteRequest( $requestHeader, $requestBody, $queryString ) {
+    function _handleDeleteRequest( $requestHeader, $requestBody, $entityType, $entityID ) {
         
-        if( self::_isQueryImplemented( $queryString ) === false ) {
+        if( self::_isEntityImplemented( $entityType, $entityID ) === false ) {
             
             $this->httpHeader->send_not_implemented_header();
         }        
         
-        else if( self::_doesQueryAwaitAnswer( $queryString ) === false ) {
+        else if( self::_doesEntityAwaitAnswer( $entityType, $entityID ) === false ) {
             
             $this->httpHeader->send_no_content_header();
         }
 
-        else if( self::_doesQueryNeedCreation( $queryString ) ) {
+        else if( self::_doesEntityNeedCreation( $entityType, $entityID ) ) {
             
             $this->httpHeader->send_ok_header();
             $this->httpBody->sendBodyMessage( 'Success' );
         }
         
-        else if( self::_isQueryAccepted( $queryString ) ) {
+        else if( self::_isEntityAccepted( $entityType, $entityID ) ) {
             
             $this->httpHeader->send_accept_header();            
         }
         
-        else if( self::_isQueryValid( $queryString ) === false ) {
+        else if( self::_doesEntityExist( $entityType, $entityID ) === false ) {
             
             $this->httpHeader->send_not_found_header();
         }
@@ -169,19 +169,9 @@ class HttpRequestHandler {
     
     // Conditionals
     
-    function _isQueryValid( $queryString ) {
+    function _doesEntityExist( $entityType, $entityID ) {
         
-        if( $queryString === '' ) {
-            
-            return true;
-        }
-        
-        return false;
-    }
-    
-    function _doesQueryAwaitAnswer( $query ) {
-        
-        if( $query === 'post' || $query === 'entityID=emptee' ) {
+        if( $entityType === 'NothingInHere' || $entityType === 'QueryStringNotFound' || $entityID === 'missing' ) {
             
             return false;
         }
@@ -189,19 +179,9 @@ class HttpRequestHandler {
         return true;
     }
     
-    function _doesQueryNeedCreation( $query ) {
+    function _doesEntityAwaitAnswer( $entityType, $entityID ) {
         
-        if( $query === 'create' || $query === 'entityID=common' ) {
-            
-            return true;
-        }
-        
-        return false;
-    }
-    
-    function _isQueryImplemented( $query ) {
-        
-        if( $query === 'entityID=null' ) {
+        if( $entityType === 'post' || $entityID === 'emptee' ) {
             
             return false;
         }
@@ -209,9 +189,9 @@ class HttpRequestHandler {
         return true;
     }
     
-    function _hasQueryResultMoved( $query ) {
+    function _doesEntityNeedCreation( $entityType, $entityID ) {
         
-        if( $query === 'entityID=missing' ) {
+        if( $entityType === 'create' || $entityID === 'common' ) {
             
             return true;
         }
@@ -219,9 +199,29 @@ class HttpRequestHandler {
         return false;
     }
     
-    function _isQueryAccepted( $query ) {
+    function _isEntityImplemented( $entityType, $entityID ) {
         
-        if( $query === 'entityID=pending' ) {
+        if( $entityID === 'null' ) {
+            
+            return false;
+        }
+        
+        return true;
+    }
+    
+    function _hasEntityMoved( $entityType, $entityID ) {
+        
+        if( $entityID === 'missing' ) {
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    function _isEntityAccepted( $entityType, $entityID ) {
+        
+        if( $entityID === 'pending' ) {
             
             return true;
         }

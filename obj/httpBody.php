@@ -2,24 +2,31 @@
 
 class HttpBody {
     
-    function sendBody( $requestMethod, $queryString, $requestHeaders, $requestBody ) {
+    function sendBody( $requestMethod, $entityType, $entityID, $requestHeaders, $requestBody ) {
         
         // Neither HEAD nor OPTIONS require a body.
-                
+        
+        $combinedEntityInformation = $entityType;
+        
+        if( $entityID !== '' ) {
+            
+            $combinedEntityInformation .= '='.$entityID;
+        }
+        
         if( $requestMethod == get_request ) {
             
-            echo self::getBodyForResourceFilteredByHeaders( $queryString, $requestHeaders );
+            echo self::getBodyForResourceFilteredByHeaders( $combinedEntityInformation, $requestHeaders );
         }
         else if( $requestMethod == post_request ) {
 
-            if( $queryString == 'create' ) {
+            if( $entityType == 'create' ) {
 
-                echo self::getBodyForResourceFilteredByHeaders( $queryString, $requestHeaders, $requestBody );                
+                echo self::getBodyForResourceFilteredByHeaders( $combinedEntityInformation, $requestHeaders, $requestBody );                
             }
         }
         else if( $requestMethod == put_request ) {
             
-            if( $queryString == 'entityID=common' ) {
+            if( $entityID == 'common' ) {
                 
                 echo 'Success';
                 return;
@@ -28,7 +35,7 @@ class HttpBody {
         
         else if( $requestMethod == delete_request ) {
             
-            if( $queryString == 'entityID=common' ) {
+            if( $entityID == 'common' ) {
                 
                 echo 'Success';
                 return;
