@@ -1,6 +1,18 @@
 <?php
 
+    define('DAV_NAMESPACE_PREFIX', 'D');
+
     class WebDAVXMLElements {
+        
+        public function xmlHeader() {
+            
+            return '<?xml version="1.0" encoding="utf-8" ?>';
+        }
+        
+        public function namespaceDefinition() {
+            
+            return 'xmlns:'.DAV_NAMESPACE_PREFIX.'=\'DAV:\'';
+        }
         
         public function activelockElement() {
             
