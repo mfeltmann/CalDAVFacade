@@ -1,7 +1,7 @@
 <?php
 
-require_once('./obj/httpHeader.php');
-require_once('./obj/httpBody.php');
+require_once('./obj/http/httpHeader.php');
+require_once('./obj/http/httpBody.php');
 require_once('./const/RequestMethods.php');
 
 class HttpRequestHandler {
