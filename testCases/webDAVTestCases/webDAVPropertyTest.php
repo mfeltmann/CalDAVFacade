@@ -16,8 +16,9 @@ class webDAVPropertyTest extends PHPUnit_Framework_TestCase {
  * 13.10	source Property
  * 13.11	supportedlock Property
  */
-
-    public function testDummy() {
-        $this->assertTrue( false );
+    
+    public function testFunctionalDummy() {
+    
+        $this->assertTrue( true );
     }
 }

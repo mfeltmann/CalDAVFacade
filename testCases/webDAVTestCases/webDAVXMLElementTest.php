@@ -1,5 +1,7 @@
 <?php
 
+require_once '../obj/webDAV/webDAVElements.php';
+
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -7,9 +9,34 @@
  */
 
 class webDAVXMLElementTest extends PHPUnit_Framework_TestCase {
+    
+    public function testActiveLockXMLElementMinimalRepresentation() {
+        
+        $elementFactory = new WebDAVElement();
+        
+        $document = new DOMDocument();
+        
+        $exclusiveElement = new DOMElement( 'exclusive' );
+        $lockscopeElement = $document->createElement( 'lockscope' );
+        $lockscopeElement->appendChild( $exclusiveElement );
+        
+        $writeElement = new DOMElement( 'write' );
+        $locktypeElement = $document->createElement( 'locktype' );
+        $locktypeElement->appendChild( $writeElement );
+
+        $depthElement = $document->createElement( 'depth' );
+        $depthElement->appendChild( new DOMText( '0' ) );
+        
+        $expectedDOM = $document->createElement( 'activelock' );
+        $expectedDOM->appendChild( $lockscopeElement );
+        $expectedDOM->appendChild( $locktypeElement );
+        $expectedDOM->appendChild( $depthElement );
+                
+        $xml = $elementFactory->activeLockElement();        
+        $this->assertEqualXMLStructure( $expectedDOM, $xml );
+    }
+
 /** XML Element Definition Test Cases
-* 12.1.1	activelock XML Element
-* 12.1.2	depth XML Element
 * 12.1.3	locktoken XML Element
 * 12.1.4	timeout XML Element
 * 12.2	collection XML Element
@@ -19,11 +46,6 @@ class webDAVXMLElementTest extends PHPUnit_Framework_TestCase {
 * 12.4.2	src XML Element
 * 12.5	lockentry XML Element
 * 12.6	lockinfo XML Element
-* 12.7	lockscope XML Element
-* 12.7.1	exclusive XML Element
-* 12.7.2	shared XML Element
-* 12.8	locktype XML Element
-* 12.8.1	write XML Element
 * 12.9	multistatus XML Element
 * 12.9.1	response XML Element
 * 12.9.2	responsedescription XML Element
@@ -39,7 +61,4 @@ class webDAVXMLElementTest extends PHPUnit_Framework_TestCase {
 * 12.14.1	allprop XML Element
 * 12.14.2	propname XML Element
 */
-    public function testDummy() {
-        $this->assertTrue( false );
-    }
 }
