@@ -30,10 +30,10 @@ class WebDAVElement {
         
         if( $token != null ) {
             
-            $parentElement->appendChild( $this->tokenElement( $token ) );
+            $parentElement->appendChild( $this->locktokenElement( $token ) );
         }
         
-        var_dump( $this->document->saveXML( $parentElement ) );
+        print( "\n\n|:".$this->document->saveXML( $parentElement ).":|\n" );
         
         return $parentElement;
     }
@@ -99,14 +99,13 @@ class WebDAVElement {
     
     protected function ownerElement( $owner ) {
         
-        
     }
     
     protected function timeoutElement( $timeout ) {
         
     }
     
-    protected function tokenElement( $token ) {
+    protected function locktokenElement( $token ) {
         
     }
 

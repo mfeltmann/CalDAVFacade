@@ -10,7 +10,7 @@ require_once '../obj/webDAV/webDAVElements.php';
 
 class webDAVXMLElementTest extends PHPUnit_Framework_TestCase {
     
-    public function testActiveLockXMLElementMinimalRepresentation() {
+    public function testActiveLockXMLElementDefaultRepresentation() {
         
         $elementFactory = new WebDAVElement();
         
