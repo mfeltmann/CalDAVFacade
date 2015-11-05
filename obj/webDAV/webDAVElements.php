@@ -80,11 +80,11 @@ class WebDAVElement {
         
         switch ( $depth ) {
             
-            case 0:
+            case '0':
                 $parentElement->appendChild( $this->depthZeroElement() );
                 break;
         
-            case 1:
+            case '1':
                 $parentElement->appendChild( $this->depthOneElement() );
                 break;
             
@@ -99,14 +99,23 @@ class WebDAVElement {
     
     protected function ownerElement( $owner ) {
         
+        $ownerElement = $this->document->createElement( 'owner' );
+        
+        return $ownerElement;
     }
     
     protected function timeoutElement( $timeout ) {
         
+        $timeoutElement = $this->document->createElement( 'timeout' );
+        
+        return $timeoutElement;
     }
     
     protected function locktokenElement( $token ) {
         
+        $tokenElement = $this->document->createElement( 'token' );
+        
+        return $tokenElement;
     }
 
 
