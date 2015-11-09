@@ -35,7 +35,60 @@ class webDAVXMLElementTest extends PHPUnit_Framework_TestCase {
         $xml = $elementFactory->activeLockElement();        
         $this->assertEqualXMLStructure( $expectedDOM, $xml );
     }
+   
+    public function testActiveLockXMLElementConfiguredRepresentation() {
+        
+        $elementFactory = new WebDAVElement();
+        
+        $document = new DOMDocument();
+        
+        $sharedElement = new DOMElement( 'shared' );
+        $lockscopeElement = $document->createElement( 'lockscope' );
+        $lockscopeElement->appendChild( $sharedElement );
+        
+        $writeElement = new DOMElement( 'write' );
+        $locktypeElement = $document->createElement( 'locktype' );
+        $locktypeElement->appendChild( $writeElement );
 
+        $depthElement = $document->createElement( 'depth' );
+        $depthElement->appendChild( new DOMText( 'infinity' ) );
+        
+        $expectedDOM = $document->createElement( 'activelock' );
+        $expectedDOM->appendChild( $lockscopeElement );
+        $expectedDOM->appendChild( $locktypeElement );
+        $expectedDOM->appendChild( $depthElement );
+                
+        $xml = $elementFactory->activeLockElement( true, 'infinity' );        
+        $this->assertEqualXMLStructure( $expectedDOM, $xml );
+    }
+    
+    public function testActiveLockXMLElementSingleDepthRepresentation() {
+        
+        $elementFactory = new WebDAVElement();
+        
+        $document = new DOMDocument();
+        
+        $sharedElement = new DOMElement( 'shared' );
+        $lockscopeElement = $document->createElement( 'lockscope' );
+        $lockscopeElement->appendChild( $sharedElement );
+        
+        $writeElement = new DOMElement( 'write' );
+        $locktypeElement = $document->createElement( 'locktype' );
+        $locktypeElement->appendChild( $writeElement );
+
+        $depthElement = $document->createElement( 'depth' );
+        $depthElement->appendChild( new DOMText( '1' ) );
+        
+        $expectedDOM = $document->createElement( 'activelock' );
+        $expectedDOM->appendChild( $lockscopeElement );
+        $expectedDOM->appendChild( $locktypeElement );
+        $expectedDOM->appendChild( $depthElement );
+                
+        $xml = $elementFactory->activeLockElement( true, 1 );        
+        $this->assertEqualXMLStructure( $expectedDOM, $xml );
+    }
+    
+    
 /** XML Element Definition Test Cases
 * 12.1.3	locktoken XML Element
 * 12.1.4	timeout XML Element
